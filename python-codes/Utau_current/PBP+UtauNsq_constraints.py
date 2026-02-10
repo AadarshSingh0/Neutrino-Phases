@@ -29,7 +29,7 @@ from colour import Color
 
 ### Load data frame for each data set ###
 
-base_path = "/home/as/Downloads/neutrino data/data_utau_current/data"
+base_path = "/home/as/Downloads/neutrino data/python-codes/data_utau_current/data"
 
 df_T2K = pd.read_csv(f"{base_path}/T2K_data.csv", header=None, sep=",", names=["X", "Y"])
 df_NOvA = pd.read_csv(f"{base_path}/NOvA_data.csv", header=None, sep=",", names=["X", "Y"])
@@ -233,17 +233,21 @@ for i in range(len(df_Mirizzi_SN.index)):
 # Define constants and functions for each plot
 
 # DANSS (*L = 10m , 1 MeV < E < 10 MeV*)
-mindanss = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e6)**3 / 10))
-maxdanss = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e7)**3 / 10))
+mindanss = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e6)**3 / 10)) # The minimum mass is determined by the coherent 
+#oscillation length being comparable to the baseline, which gives m_N ~ (4 * E^3 / L)^(1/4). Here we take E = 1 MeV and L = 10 m.
+maxdanss = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e7)**3 / 10)) # The maximum mass is determined by the coherent 
+#oscillation length being comparable to the baseline, which gives m_N ~ (4 * E^3 / L)^(1/4). Here we take E = 1 MeV and L = 10 m.
 c1danss = 0.1 * 0.01 / (1.27 * 0.01)
+c2danss = 0.1 * 0.001 / (1.27 * 0.01)
+c1danss = 10 * 0.01 / (1.27 * 0.01)
 c2danss = 0.1 * 0.001 / (1.27 * 0.01)
 ymaxdanss = lambda x: c1danss / x**2
 ymindanss = lambda x: c2danss / x**2
 
-# SND (*L = 480m , 100 GeV < E < 1 TeV*)
+# FASER (*L = 480m , 100 GeV < E < 1 TeV*)
 minsnd = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e11)**3 / 480))
 maxsnd = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e12)**3 / 480))
-c1snd = 0.1 * 1000 / (1.27 * 0.48)
+c1snd = 10 * 1000 / (1.27 * 0.48)
 c2snd = 0.1 * 100 / (1.27 * 0.48)
 ymaxsnd = lambda x: c1snd / x**2
 yminsnd = lambda x: c2snd / x**2
@@ -251,7 +255,7 @@ yminsnd = lambda x: c2snd / x**2
 # SBL (*L = 110m , 100 MeV < E < 10 GeV*)
 minsbl = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e8)**3 / 110))
 maxsbl = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e10)**3 / 110))
-c1sbl = 0.1 * 10 / (1.27 * 0.11)
+c1sbl = 10 * 10 / (1.27 * 0.11)
 c2sbl = 0.1 * 0.1 / (1.27 * 0.11)
 ymaxsbl = lambda x: c1sbl / x**2
 yminsbl = lambda x: c2sbl / x**2
@@ -259,7 +263,7 @@ yminsbl = lambda x: c2sbl / x**2
 # LBL (*L = 1300km , 1 MeV < E < 10 GeV*)
 minlbl = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e6)**3 / (1300 * 1e3)))
 maxlbl = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e10)**3 / (1300 * 1e3)))
-c1lbl = 0.1 * 10 / (1.27 * 1300)
+c1lbl = 10 * 10 / (1.27 * 1300)
 c2lbl = 0.1 * 0.001 / (1.27 * 1300)
 ymaxlbl = lambda x: c1lbl / x**2
 yminlbl = lambda x: c2lbl / x**2
@@ -268,7 +272,7 @@ yminlbl = lambda x: c2lbl / x**2
 minsolar = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e5)**3 / (1 * 1e11)))
 maxsolar = np.sqrt(np.sqrt(4 * 0.197e-6 * (1.8*1e7)**3 / (1 * 1e11)))
 c2solar = 0.1 * 1e-4 / (1.27 * 1e8)
-c1solar = 0.1 * 1.8*1e-2 / (1.27 * 1e8)
+c1solar = 10 * 1.8*1e-2 / (1.27 * 1e8)
 ymaxsolar = lambda x: c1solar / x**2
 yminsolar = lambda x: c2solar / x**2
 
@@ -276,7 +280,7 @@ yminsolar = lambda x: c2solar / x**2
 minastro = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e12)**3 / (1e25)))
 maxastro = np.sqrt(np.sqrt(4 * 0.197e-6 * (1e15)**3 / (1e25)))
 c2astro = 0.1 * 1e3 / (1.27 * 1e22)
-c1astro = 0.1 * 1e6 / (1.27 * 1e22)
+c1astro = 10 * 1e6 / (1.27 * 1e22)
 ymaxastro = lambda x: c1astro / x**2
 yminastro = lambda x: c2astro / x**2
 
@@ -383,12 +387,12 @@ ax.plot(log_x_lbl_max, log_ymax_lbl, label="LBL E = 10 GeV", linestyle='-', colo
 ax.plot(log_x_lbl_min, log_ymin_lbl, label="LBL E = 1 MeV", linestyle='--', color='red', linewidth=2)
 
 # Plot Solar
-ax.plot(log_x_solar_max, log_ymax_solar, label="Solar E = 10 GeV", linestyle='-', color='purple', linewidth=2)
-ax.plot(log_x_solar_min, log_ymin_solar, label="Solar E = 1 MeV", linestyle='--', color='purple', linewidth=2)
+ax.plot(log_x_solar_max, log_ymax_solar, label="Solar E = 18 MeV", linestyle='-', color='purple', linewidth=2)
+ax.plot(log_x_solar_min, log_ymin_solar, label="Solar E = 100 KeV", linestyle='--', color='purple', linewidth=2)
 
 # Plot Astro
-ax.plot(log_x_astro_max, log_ymax_astro, label="Astro E = 10 GeV", linestyle='-', color='brown', linewidth=2)
-ax.plot(log_x_astro_min, log_ymin_astro, label="Astro E = 1 MeV", linestyle='--', color='brown', linewidth=2)
+ax.plot(log_x_astro_max, log_ymax_astro, label="Astro E = 1 PeV", linestyle='-', color='brown', linewidth=2)
+ax.plot(log_x_astro_min, log_ymin_astro, label="Astro E = 1 TeV", linestyle='--', color='brown', linewidth=2)
 
 
 ### Shading ###
