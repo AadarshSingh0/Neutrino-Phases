@@ -281,7 +281,7 @@ ax.fill_between(x_pert, y_pert, 1e-5, color='gray', alpha=1.0, zorder=10)
 
 # Add "Non-Perturbative" label
 ax.text(1, 1e-8, 'Non-Perturbative', 
-        fontsize=11, fontweight='bold', color='white',
+        fontsize=17, fontweight='bold', color='white',
         bbox=dict(boxstyle='round,pad=0.5', facecolor='black', edgecolor='none'),
         zorder=11)
 
